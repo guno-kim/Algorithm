@@ -31,7 +31,7 @@ while cnt!=K:
 if not nextNodes:
     print(-1)
 else:
+    nextNodes.sort()
     for node in nextNodes:
-        nextNodes.sort()
         print(node)
 
