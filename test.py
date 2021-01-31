@@ -1,61 +1,42 @@
 import sys
-from collections import deque
+import heapq
 input = sys.stdin.readline
 
-n, m = map(int, input().split())
-miro = [list(input().rstrip()) for _ in range(n)]
-visited = [[[False for _ in range(m)] for _ in range(n)] for _ in range(2)]
 
-q = deque()
-q.append((0, 0, False))
-res = 1
-can = False
-while q:
-    length = len(q)
-    for _ in range(length):
-        i, j, x = q.popleft()
-        if i == n-1 and j == m-1:
-            print(res)
-            can = True
-            exit()
-        if i > 0:
-            if miro[i-1][j] == '0':
-                if not visited[x][i-1][j]:
-                    visited[x][i-1][j] = True
-                    q.append((i-1, j, x))
-            else:
-                if not x and not visited[x][i-1][j]:
-                    visited[x][i-1][j] = True
-                    q.append((i-1, j, True))
-        if j > 0:
-            if miro[i][j-1] == '0':
-                if not visited[x][i][j-1]:
-                    visited[x][i][j-1] = True
-                    q.append((i, j-1, x))
-            else:
-                if not x and not visited[x][i][j-1]:
-                    visited[x][i][j-1] = True
-                    q.append((i, j-1, True))
-        if i+1 < n:
-            if miro[i+1][j] == '0':
-                if not visited[x][i+1][j]:
-                    visited[x][i+1][j] = True
-                    q.append((i+1, j, x))
-            else:
-                if not x and not visited[x][i+1][j]:
-                    visited[x][i+1][j] = True
-                    q.append((i+1, j, True))
-        if j+1 < m:
-            if miro[i][j+1] == '0':
-                if not visited[x][i][j+1]:
-                    visited[x][i][j+1] = True
-                    q.append((i, j+1, x))
-            else:
-                if not x and not visited[x][i][j+1]:
-                    visited[x][i][j+1] = True
-                    q.append((i, j+1, True))
+def solve():
+    N, M, K = map(int, input().split())
+    adj = [[] for _ in range(N+1)]
+    for _ in range(K):
+        u, v, c, d = map(int, input().split())
+        adj[u].append((v, c, d))
+    dist = [[sys.maxsize for _ in range(M+1)] for _ in range(N+1)]
+    q = []
+    dist[1][0] = 0
+    heapq.heappush(q, (0, 0, 1))
+    res = -1
+    while q:
+        time, cost, here = heapq.heappop(q)
+        if dist[here][cost] < time:
+            continue
+        if here == N:
+            res = time
+            break
+        for nxt, nc, nt in adj[here]:
+            nt += time
+            nc += cost
+            if nc > M or dist[nxt][nc] <= nt:
+                continue
+            for i in range(nc, M+1):
+                if dist[nxt][i] > nt:
+                    dist[nxt][i] = nt
+                else:
+                    break
+            heapq.heappush(q, (nt, nc, nxt))
+    print("Poor KCM" if res == -1 else res)
+    return
 
-    res += 1
 
-if not can:
-    print(-1)
+if __name__ == '__main__':
+    T = int(input())
+    for _ in range(T):
+        solve()
