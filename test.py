@@ -1,42 +1,18 @@
-import sys
-import heapq
-input = sys.stdin.readline
+import collections
+import itertools
 
+def solution(orders, course):
+    result = []
 
-def solve():
-    N, M, K = map(int, input().split())
-    adj = [[] for _ in range(N+1)]
-    for _ in range(K):
-        u, v, c, d = map(int, input().split())
-        adj[u].append((v, c, d))
-    dist = [[sys.maxsize for _ in range(M+1)] for _ in range(N+1)]
-    q = []
-    dist[1][0] = 0
-    heapq.heappush(q, (0, 0, 1))
-    res = -1
-    while q:
-        time, cost, here = heapq.heappop(q)
-        if dist[here][cost] < time:
-            continue
-        if here == N:
-            res = time
-            break
-        for nxt, nc, nt in adj[here]:
-            nt += time
-            nc += cost
-            if nc > M or dist[nxt][nc] <= nt:
-                continue
-            for i in range(nc, M+1):
-                if dist[nxt][i] > nt:
-                    dist[nxt][i] = nt
-                else:
-                    break
-            heapq.heappush(q, (nt, nc, nxt))
-    print("Poor KCM" if res == -1 else res)
-    return
+    for course_size in course:
+        order_combinations = []
+        for order in orders:
+            order_combinations += itertools.combinations(sorted(order), course_size)
 
+        most_ordered = collections.Counter(order_combinations).most_common()
+        print(most_ordered)
+        result += [ k for k, v in most_ordered if v > 1 and v == most_ordered[0][1] ]
 
-if __name__ == '__main__':
-    T = int(input())
-    for _ in range(T):
-        solve()
+    return [ ''.join(v) for v in sorted(result) ]
+
+solution(["ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH"],[2,3,4])
