@@ -10,8 +10,7 @@ for n in range(1, N):
         for f in range(4):
             b[i][f] = a[i - 1][f] + a[i + 1][f]
     for f in [0, 2]:
-
-        
+        b[0][f | 1] = a[1][f] + a[1][f | 1]
         b[0][f | 1] = a[1][f] + a[1][f | 1]
     for f in [0, 1]:
         b[9][f | 2] = a[8][f] + a[8][f | 2]
