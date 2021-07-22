@@ -1,4 +1,4 @@
-package 유형.트리.boj_1927_최소힙;
+package 유형.트리_힙.boj_1927_최소힙;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -7,7 +7,6 @@ import java.io.OutputStreamWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 public class Main {
     static List<Long> heap=new ArrayList<>();

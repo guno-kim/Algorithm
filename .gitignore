@@ -1,1 +1,7 @@
 test.py
+out
+.idea
+__pycache__
+algorithm.iml
+Test.java
+./Main.java
